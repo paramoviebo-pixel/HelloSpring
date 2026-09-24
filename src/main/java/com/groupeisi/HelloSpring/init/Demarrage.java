@@ -1,7 +1,11 @@
 package com.groupeisi.HelloSpring.init;
 
+import com.groupeisi.HelloSpring.entities.Entreprise;
+import com.groupeisi.HelloSpring.entities.Stage;
 import com.groupeisi.HelloSpring.entities.Etudiant;
+import com.groupeisi.HelloSpring.repositories.EntrepriseRepository;
 import com.groupeisi.HelloSpring.repositories.EtudiantRepository;
+import com.groupeisi.HelloSpring.repositories.StageRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -11,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,8 +27,92 @@ public class Demarrage implements CommandLineRunner {
 
 
     private final EtudiantRepository etudiantRepository;
+    private final EntrepriseRepository entrepriseRepository;
 
+    private final StageRepository stageRepository;
 
+  // variable d'entreprise initialisé
+  private final List<Entreprise> entreprises = Arrays.asList(
+
+          new Entreprise(
+                  "Sonatel",
+                  "Télécommunications",
+                  "Dakar, Sénégal",
+                  "contact@sonatel.sn",
+                  "+221338391212"
+          ),
+
+          new Entreprise(
+                  "SENEGAL AIRLINES",
+                  "Transport aérien",
+                  "Dakar, Sénégal",
+                  "contact@senegalairlines.sn",
+                  "+221338690000"
+          ),
+
+          new Entreprise(
+                  "Kirène",
+                  "Agroalimentaire",
+                  "Dakar, Sénégal",
+                  "contact@kirene.sn",
+                  "+221338399999"
+          ),
+
+          new Entreprise(
+                  "CBAO",
+                  "Banque",
+                  "Dakar, Sénégal",
+                  "contact@cbao.sn",
+                  "+221338499696"
+          ),
+
+          new Entreprise(
+                  "Orange Sénégal",
+                  "Télécommunications",
+                  "Dakar, Sénégal",
+                  "contact@orange.sn",
+                  "+221338123456"
+          )
+  );
+    //listes des stages
+
+    List<Stage> stages = Arrays.asList(
+
+            new Stage(
+                    "Développement d'une application web avec Spring Boot",
+                    LocalDate.of(2026, 1, 15),
+                    LocalDate.of(2026, 4, 15),
+                    "EN_COURS"
+            ),
+
+            new Stage(
+                    "Conception d'une application mobile Android",
+                    LocalDate.of(2026, 2, 1),
+                    LocalDate.of(2026, 5, 1),
+                    "EN_COURS"
+            ),
+
+            new Stage(
+                    "Mise en place d'une base de données PostgreSQL",
+                    LocalDate.of(2026, 1, 10),
+                    LocalDate.of(2026, 3, 10),
+                    "TERMINE"
+            ),
+
+            new Stage(
+                    "Développement d'une API REST avec Spring Boot",
+                    LocalDate.of(2026, 3, 1),
+                    LocalDate.of(2026, 6, 1),
+                    "EN_COURS"
+            ),
+
+            new Stage(
+                    "Création d'une plateforme de gestion des entreprises",
+                    LocalDate.of(2026, 4, 1),
+                    LocalDate.of(2026, 7, 1),
+                    "PLANIFIE"
+            )
+    );
     // 100 prénoms africains : 80 sénégalais + 20 autres africains
     private String[] prenomsAfricains = {
             // 80 prénoms sénégalais
@@ -71,8 +163,12 @@ public class Demarrage implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("Demarrage"); //trace/debug/info/warn/error
+        long nbEntreprise= entrepriseRepository.count();
+        long nbStage= stageRepository.count();
         long nbEtudiants = etudiantRepository.count();
         log.info("il existe {} étudiant(s) en base", nbEtudiants);
+        log.info("il existe {} stage(s) en base", nbStage);
+        log.info("il existe {} entreprise(s) en base", nbEntreprise);
 
         if (nbEtudiants == 0) {
             log.warn("aucun etudfiant en base, initialisation des etudiants");
@@ -100,8 +196,20 @@ public class Demarrage implements CommandLineRunner {
         }else{
             log.info("il ya desja des données en base (pas d'initialisation a faire)");
         }
-
-
+// initialisation en base de l'entité entreprise
+        if (nbEntreprise == 0) {
+            log.warn("aucune entreprise en base, initialisation des etudiants");
+            entrepriseRepository.saveAll(entreprises);
+        }else {
+            log.info("il ya desja des données en base (pas d'initialisation a faire)");
+        }
+        // initialisation en base de l'entité stage
+        if (nbStage== 0) {
+            log.warn("aucun stage en base, initialisation des etudiants");
+            stageRepository.saveAll(stages);
+        }else {
+            log.info("il ya desja des données en base (pas d'initialisation a faire)");
+        }
 
     }
 }

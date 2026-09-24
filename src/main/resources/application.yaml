@@ -3,10 +3,10 @@ spring:
     name: HelloSpring
 
   datasource:
-    url: jdbc:mysql://localhost:3306/isi_hello_spring
-    username: root
-    password: passer123
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/isi_hello_spring
+    username: postgres
+    password: Barthy
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: create
